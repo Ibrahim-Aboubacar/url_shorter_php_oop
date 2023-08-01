@@ -14,7 +14,7 @@ $router = new Router($_GET['url'] ?? '/');
 $router->get('/', ['Controllers\HomeController', 'index'], 'home');
 
 // LINKS
-$router->get('/links', ['Controllers\LinkController', 'index'], 'links.show')->middleware('auth'); #->middleware('auth');
+$router->get('/links', ['Controllers\LinkController', 'index'], 'links.show')->middleware('auth')->middleware('auth');
 
 $router->get('/l/:id', ['Controllers\LinkController', 'short'], 'link.short')->with('id', '[0-9]+');
 
@@ -33,7 +33,7 @@ $router->post('/login', ['Controllers\UserController', 'loginAction'], 'user.log
 $router->get('/register', ['Controllers\UserController', 'register'], 'user.register')->middleware('guest');
 $router->post('/register', ['Controllers\UserController', 'registerAction'], 'user.register.action')->middleware('guest');
 
-$router->get('/logout', ['Controllers\UserController', 'logout'], 'user.logout')->middleware('guest');
+$router->get('/logout', ['Controllers\UserController', 'logout'], 'user.logout')->middleware('auth');
 
 
 // RUN THE APP
