@@ -9,6 +9,7 @@ return array(
     'Source\\' => array($baseDir . '/src'),
     'Router\\' => array($baseDir . '/Router'),
     'Models\\' => array($baseDir . '/Models'),
+    'Middlewares\\' => array($baseDir . '/Middlewares'),
     'Exceptions\\' => array($baseDir . '/Exceptions'),
     'Controllers\\' => array($baseDir . '/Controllers'),
 );

@@ -18,6 +18,7 @@ class ComposerStaticInit5f5cc4f6d6c0fc4674a52294b5995d67
         'M' => 
         array (
             'Models\\' => 7,
+            'Middlewares\\' => 12,
         ),
         'E' => 
         array (
@@ -41,6 +42,10 @@ class ComposerStaticInit5f5cc4f6d6c0fc4674a52294b5995d67
         'Models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Models',
+        ),
+        'Middlewares\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Middlewares',
         ),
         'Exceptions\\' => 
         array (

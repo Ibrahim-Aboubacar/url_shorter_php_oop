@@ -3,13 +3,14 @@
 namespace Router;
 
 use Exceptions\RouterException;
+use Middlewares\Middleware;
 
 class Route
 {
     private $path;
     private $matches = [];
     private $params = [];
-    private $withAuthentication = false;
+    private $middleware = null;
 
     public function __construct($path, private $callable)
     {
@@ -45,15 +46,11 @@ class Route
 
     public function call(Router $router)
     {
-        if ($this->withAuthentication && !isset($_SESSION['auth']['id'])) {
-            // Renvoyer le code de réponse 401 Unauthorized
-            http_response_code(401);
-            header('location: ' . $router->url('user.login'));
-            die;
-        }
-
-
         if (is_callable($this->callable)) {
+
+            // APPEL AU MIDDLEWARE 
+            Middleware::resolve($this->getMiddleware(), $router);
+
             $action = $this->callable;
             return $action();
         }
@@ -63,6 +60,9 @@ class Route
 
             if (class_exists($className) && method_exists($className, $method)) {
                 $class = new $className();
+
+                // APPEL AU MIDDLEWARE 
+                Middleware::resolve($this->getMiddleware(), $router);
 
                 return call_user_func_array([$class, $method], [...$this->matches, $router]);
             }
@@ -78,10 +78,10 @@ class Route
         return $this;
     }
 
-    public function withAuth()
+    public function middleware($key)
     {
-        $this->withAuthentication = true;
-
+        $this->setMiddleware($key);
+        // Middleware::resolve($key, new Router($_GET['url']));
         return $this;
     }
 
@@ -94,5 +94,25 @@ class Route
         }
 
         return $path;
+    }
+
+    /**
+     * Get the value of middleware
+     */
+    public function getMiddleware()
+    {
+        return $this->middleware;
+    }
+
+    /**
+     * Set the value of middleware
+     *
+     * @return  self
+     */
+    public function setMiddleware($middleware)
+    {
+        $this->middleware = $middleware;
+
+        return $this;
     }
 }
