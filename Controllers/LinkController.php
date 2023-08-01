@@ -11,10 +11,9 @@ class LinkController
 {
     public function index()
     {
-
         $vars = [
             'pageName' => 'links',
-            'links' => (new link)->getUsersLinks($_SESSION['auth']['id'] ?? 0),
+            'links' => (new link())->getUsersLinks($_SESSION['auth']['id'] ?? 0),
             'message' => '',
 
         ];
@@ -42,7 +41,6 @@ class LinkController
 
         $vars = [
             'pageName' => 'links',
-            // 'router' => $router,
             'old_name' => '',
             'old_link' => '',
             'old_state' => 1
@@ -54,7 +52,6 @@ class LinkController
     public function edite(int $id): Renderer
     {
         $link = new link($id);
-
         // Throw a 404 error whwn we don't have a link or 
         // the link does not belong to the logedin user
         if (!$link->getInitialized() || !$link->belongsToUser(new User($_SESSION['auth']['id'] ?? 0))) return Renderer::error404('Link does not exit');
@@ -73,33 +70,18 @@ class LinkController
     public function delete(int $id, Router $router): Renderer
     {
         $link = new link($id);
-
         // Throw a 404 error whwn we don't have a link or 
         // the link does not belong to the logedin user
         if (!$link->getInitialized() || !$link->belongsToUser(new User($_SESSION['auth']['id'] ?? 0))) return Renderer::error404('Link does not exit');
 
         $link->delete();
 
-        $vars = [
-            'pageName' => 'links',
-            // 'link_id' => $link->getId(),
-            // 'old_name' => $link->getName(),
-            // 'old_link' => $link->getOriginal_link(),
-            // 'old_state' => $link->getState(),
-        ];
-
+        http_response_code(302);
         return header('location: ' . $router->url('links.show'));
-        // return Renderer::make('links/index', $vars);
     }
 
     public function store(Router $router): Renderer
     {
-        $old_name = '';
-        $old_link = '';
-        $old_state = 1;
-
-        $error = [];
-
         // Traitement de nom
         if (isset($_POST['name']) && strlen(trim($_POST['name']))) {
             $name = htmlentities(trim($_POST['name']));
@@ -113,6 +95,7 @@ class LinkController
             $link = htmlentities(trim($_POST['link']));
             $old_link = $link;
         } else {
+            $old_link = htmlentities(trim($_POST['link'] ?? ''));
             $error['link'] = "Le lien original est requis (un lien valide)!";
         }
 
@@ -124,8 +107,6 @@ class LinkController
             $state = 0;
             $old_state = $state;
         }
-
-
 
         if (!$error) {
             $linkModel = new Link();
@@ -141,14 +122,13 @@ class LinkController
                     $name,
                     $link,
                     $state,
-                    1
+                    $_SESSION['auth']['id']
                 ]
             );
 
-
             if ($res) {
+                http_response_code(302);
                 header('location: ' . $router->url('links.show'));
-                // header('location: /links');
                 die;
             } else {
                 $message = "Une erreur s'est produite, veuillez réessayer s'il vous plait!";
@@ -157,11 +137,11 @@ class LinkController
 
         $vars = [
             'pageName' => 'links',
-            // 'router' => $router,
-            'old_name' => $old_name,
-            'old_link' => $old_link,
-            'old_state' => $old_state,
-            'message' => $message
+            'old_name' => $old_name ?? '',
+            'old_link' => $old_link ?? '',
+            'old_state' => $old_state ?? 1,
+            'message' => $message ?? null,
+            'error' => $error ?? [],
 
         ];
         return Renderer::make('links/new', $vars);
@@ -179,8 +159,6 @@ class LinkController
         $old_name = $link->getName();
         $old_link = $link->getOriginal_link();
         $old_state = $link->getState();
-
-        $error = [];
 
         // Traitement de nom
         if (isset($_POST['name']) && strlen(trim($_POST['name']))) {
@@ -208,8 +186,6 @@ class LinkController
             $old_state = $state;
         }
 
-
-
         if (!$error) {
 
             $link->setName($old_name);
@@ -219,9 +195,11 @@ class LinkController
             $res = $link->update();
 
             if ($res) {
+                http_response_code(302);
                 header('location: ' . $router->url('links.show'));
                 die;
             } else {
+                http_response_code(422);
                 $message = "Une erreur s'est produite, veuillez réessayer s'il vous plait!";
             }
         }
@@ -233,6 +211,7 @@ class LinkController
             'old_link' => $old_link,
             'old_state' => $old_state,
             'message' => $message,
+            'error' => $error ?? [],
 
         ];
         http_response_code(422);
