@@ -2,6 +2,8 @@
 
 namespace Source;
 
+use Source\Constant;
+
 class Renderer
 {
     public function __construct(private string $viewPath, private ?array $params, private $error = 0)
@@ -26,7 +28,9 @@ class Renderer
 
         if ($this->error === 0) require BASE_VIEW_PATH . 'parts/footer.php';
 
-        return ob_get_clean();
+        $html = self::rendDrirectives(ob_get_clean());
+        die($html);
+        exit;
     }
 
     public static function make(string $viewPath, array $params = []): static
@@ -49,5 +53,16 @@ class Renderer
     public function __toString()
     {
         return $this->view();
+    }
+
+    public static function rendDrirectives($html): string
+    {
+        foreach (Directive::DIRECTIVES as $key => $value) {
+            // Expression régulière pour trouver @PUT, @PATCH ou @DELETE
+            $regex = '/@' . preg_quote($key, '/') . '/';
+
+            $html = preg_replace($regex, $value, $html);
+        }
+        return $html;
     }
 };

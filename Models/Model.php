@@ -2,13 +2,13 @@
 
 namespace Models;
 
-use PDOStatement;
+use Exceptions\RouterException;
+use PDO;
 use Source\Constant;
-use Source\Dump;
 
 abstract class Model
 {
-    protected static \PDO $pdo;
+    protected static PDO $pdo;
     protected string $table;
     protected $id;
     protected $initialized = false;
@@ -17,17 +17,17 @@ abstract class Model
     public function __construct($id = null)
     {
         try {
-            static::$pdo = new \PDO(
+            static::$pdo = new PDO(
                 'mysql:dbname=' . Constant::DB_NAME . ';host=' . Constant::DB_HOST,
                 Constant::DB_USERNAME,
                 Constant::DB_PASSWORD,
                 [
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 ]
             );
         } catch (\PDOException $e) {
-            echo $e->getMessage();
+            throw new RouterException($e->getMessage(), true);
             die();
         }
 
@@ -145,7 +145,7 @@ abstract class Model
         return [];
     }
 
-    protected function getPDO(): \PDO
+    protected function getPDO(): PDO
     {
         return static::$pdo;
     }

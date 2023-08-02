@@ -4,6 +4,7 @@ namespace Router;
 
 use Exceptions\RouterException;
 use Middlewares\Middleware;
+use Source\Dump;
 
 class Route
 {
@@ -47,7 +48,6 @@ class Route
     public function call(Router $router)
     {
         if (is_callable($this->callable)) {
-
             // APPEL AU MIDDLEWARE 
             Middleware::resolve($this->getMiddleware(), $router);
 
@@ -58,17 +58,21 @@ class Route
         if (is_array($this->callable)) {
             [$className, $method] = $this->callable;
 
-            if (class_exists($className) && method_exists($className, $method)) {
-                $class = new $className();
+            if (class_exists($className)) {
+                if (method_exists($className, $method)) {
+                    $class = new $className();
+                    // APPEL AU MIDDLEWARE 
+                    Middleware::resolve($this->getMiddleware(), $router);
 
-                // APPEL AU MIDDLEWARE 
-                Middleware::resolve($this->getMiddleware(), $router);
-
-                return call_user_func_array([$class, $method], [...$this->matches, $router]);
+                    return call_user_func_array([$class, $method], [...$this->matches, $router]);
+                } else {
+                    throw new RouterException("Method not foun for '{$method}' in '{$className}'", true);
+                }
             }
+            throw new RouterException("Class not foun for '{$className}'", true);
         }
 
-        throw new RouterException("Couldn't execute any callable or controller!");
+        throw new RouterException("Couldn't execute any callable or controller!", true);
     }
 
     public function with($param, $regex)
@@ -78,10 +82,17 @@ class Route
         return $this;
     }
 
-    public function middleware($key)
+    /**
+     * Set the middleware for the class object.
+     *
+     * @param string $middleware The middleware to be set.
+     * @return $this The object with the middleware set.
+     */
+    public function withMiddleware(string $middlewareKey)
     {
-        $this->setMiddleware($key);
-        // Middleware::resolve($key, new Router($_GET['url']));
+        if (!Middleware::isValid($middlewareKey)) throw new RouterException("The given middleware '" . $middlewareKey . "' is not found", true);
+
+        $this->setMiddleware($middlewareKey);
         return $this;
     }
 
@@ -114,5 +125,29 @@ class Route
         $this->middleware = $middleware;
 
         return $this;
+    }
+
+    /**
+     * Get the value of path
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Get the value of params
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Get the value of callable
+     */
+    public function getCallable()
+    {
+        return $this->callable;
     }
 }

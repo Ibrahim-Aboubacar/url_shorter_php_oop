@@ -67,7 +67,7 @@ use Source\Constant; ?>
                                 <a href="<?= $router->url('links.edite', ['id' => $link->id]) ?>" class="btn btn-sm my-1 btn-primary">Modifer</a>
 
                                 <form method="POST" action="<?= $router->url('links.delete', ['id' => $link->id]) ?>">
-
+                                    @DELETE
                                     <button data-link-id="<?= $link->id ?>" class="btn btn-sm my-1 btn-danger delete-link-btn">Supprimer</button>
                                 </form>
                             </td>

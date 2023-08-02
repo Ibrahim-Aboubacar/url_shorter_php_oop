@@ -2,34 +2,36 @@
 
 namespace Middlewares;
 
-use Exception;
+use Exceptions\RouterException;
 use Router\Router;
 
 class Middleware
-{
-    // NOTRE LIST DE MIDDLEWARE
+{   // NOTRE LIST DE MIDDLEWARE
     const MAP = [
         'auth' => AuthMiddleware::class,
-        'guest' => GuestMiddleware::class
+        'guest' => GuestMiddleware::class,
+        'debug' => DebugMiddleware::class,
     ];
 
     public static function resolve($key, Router $router)
     {
         if (is_null($key)) return;
 
-        $middleware = static::MAP[$key] ?? false;
+        if (!self::isValid($key)) throw new RouterException("No mathing middleware for the key '{$key}'.", true);
+        $classOfMiddleware = static::MAP[$key];
 
-        if (!$middleware) {
-            throw new Exception("No mathing middleware for the key '{$key}'.");
-        }
+        if (class_exists($classOfMiddleware)) {
 
-        if (class_exists($middleware) && method_exists($middleware, 'handle')) {
+            if (method_exists($classOfMiddleware, 'handle')) return call_user_func_array([(new $classOfMiddleware()), 'handle'], [$router]);
 
-            $class = new $middleware();
-
-            return call_user_func_array([$class, 'handle'], [$router]);
+            throw new RouterException("Method 'handle' not found in {$classOfMiddleware}.", true);
         } else {
-            throw new Exception("Class or method not found for '{$middleware}' @ 'handle'.");
+            throw new RouterException("Class '{$classOfMiddleware}' not found.", true);
         }
+    }
+
+    public static function isValid($middlewareKey): bool
+    {
+        return array_key_exists($middlewareKey, self::MAP);
     }
 }

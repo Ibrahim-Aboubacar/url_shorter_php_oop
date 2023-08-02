@@ -33,8 +33,6 @@ class User extends Model
             $this->setPassword($user->password);
             $this->initialized = true;
         }
-
-
         return $this;
     }
 

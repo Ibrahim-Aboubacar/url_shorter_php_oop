@@ -77,7 +77,6 @@ class UserController
             'old_username' => '',
             'old_email' => '',
             'old_password' => '',
-            // 'message' => '',
 
         ];
         return Renderer::make('users/register', $vars);
@@ -154,6 +153,8 @@ class UserController
                 $message = "Une erreur s'est produite, veuillez réessayer s'il vous plait!";
             }
         }
+
+        if (!$message) $message = "Une erreur s'est produite, veuillez renseigner des information valide!!!";
 
         $vars = [
             'pageName' => 'register',

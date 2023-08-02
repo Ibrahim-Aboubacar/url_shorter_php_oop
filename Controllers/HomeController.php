@@ -9,7 +9,7 @@ class HomeController
     public function index(): Renderer
     {
         $vars = [
-            'pageName' => '',
+            'pageName' => 'home',
         ];
         return Renderer::make('home/index', $vars);
     }

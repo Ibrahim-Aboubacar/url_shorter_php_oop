@@ -38,13 +38,11 @@ class LinkController
 
     public function new(): Renderer
     {
-
         $vars = [
             'pageName' => 'links',
             'old_name' => '',
             'old_link' => '',
             'old_state' => 1
-
         ];
         return Renderer::make('links/new', $vars);
     }
@@ -82,6 +80,7 @@ class LinkController
 
     public function store(Router $router): Renderer
     {
+        $error = [];
         // Traitement de nom
         if (isset($_POST['name']) && strlen(trim($_POST['name']))) {
             $name = htmlentities(trim($_POST['name']));
@@ -127,7 +126,7 @@ class LinkController
             );
 
             if ($res) {
-                http_response_code(302);
+                http_response_code(200);
                 header('location: ' . $router->url('links.show'));
                 die;
             } else {
@@ -142,7 +141,6 @@ class LinkController
             'old_state' => $old_state ?? 1,
             'message' => $message ?? null,
             'error' => $error ?? [],
-
         ];
         return Renderer::make('links/new', $vars);
     }
@@ -165,7 +163,8 @@ class LinkController
             $name = htmlentities(trim($_POST['name']));
             $old_name = $name;
         } else {
-            $error['name'] = "Le Nom est requis!";
+            $message = "Le Nom est requis!";
+            $error['name'] = $message;
         }
 
         // Traitement de lien
@@ -174,7 +173,8 @@ class LinkController
 
             $old_link = $link_p;
         } else {
-            $error['link'] = "Le lien original est requis (un lien valide)!";
+            $message = "Le lien original est requis (un lien valide)!";
+            $error['link'] = $message;
         }
 
         // Traitement de statu
@@ -195,7 +195,7 @@ class LinkController
             $res = $link->update();
 
             if ($res) {
-                http_response_code(302);
+                http_response_code(202);
                 header('location: ' . $router->url('links.show'));
                 die;
             } else {
@@ -210,10 +210,10 @@ class LinkController
             'old_name' => $old_name,
             'old_link' => $old_link,
             'old_state' => $old_state,
-            'message' => $message,
+            'message' => $message ?? '',
             'error' => $error ?? [],
-
         ];
+
         http_response_code(422);
         return Renderer::make('links/edite', $vars);
     }
