@@ -36,16 +36,18 @@ class Renderer
 
     public static function error404(string $message = null)
     {
-        return new static('errors/404', ['message' => $message], 404);
+        http_response_code(404);
+        return new static('errors/404', ['message' => $message ?? 'NOT FOUND'], 404);
     }
 
     public static function error500(string $message = null)
     {
-        return new static('errors/500', ['message' => $message], 500);
+        http_response_code(4500);
+        return new static('errors/500', ['message' => $message ?? 'SERVER SIDE ERROR'], 500);
     }
 
     public function __toString()
     {
         return $this->view();
     }
-}
+};

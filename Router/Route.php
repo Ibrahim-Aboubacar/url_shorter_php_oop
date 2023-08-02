@@ -22,7 +22,7 @@ class Route
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         // '([^/]+)'
-        // CASE SENSITIVE AVEC LE i ET CASE INSENSITIVE SANS LE i
+        // CASE SENSITIVE SANS LE i ET CASE INSENSITIVE AVEC LE i
         $regex = "#^$path$#i";
 
         if (!preg_match($regex, $url, $matches)) {
