@@ -4,6 +4,7 @@ namespace Router;
 
 use Exceptions\RouterException;
 use Middlewares\Middleware;
+use Source\Constant;
 use Source\Dump;
 
 class Route
@@ -21,7 +22,15 @@ class Route
     public function match($url)
     {
         $url = trim($url, '/');
-        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
+
+        $thisPath = $this->path;
+
+        if (Constant::DEBUG_MODE) {
+            // SUPPORT FOR LOCAL EVIRRONEMENT
+            if (str_contains($thisPath, 'localhost') || str_contains($thisPath, '121.0.0.1')) $thisPath  = trim(str_replace(Constant::DOMAIN . 'public', '', $thisPath), '/');
+        }
+
+        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $thisPath);
         // '([^/]+)'
         // CASE SENSITIVE SANS LE i ET CASE INSENSITIVE AVEC LE i
         $regex = "#^$path$#i";
@@ -45,7 +54,7 @@ class Route
         return '([^/]+)';
     }
 
-    public function call(Router $router)
+    public function execute(Router $router)
     {
         if (is_callable($this->callable)) {
             // APPEL AU MIDDLEWARE 

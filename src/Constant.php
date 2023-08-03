@@ -4,7 +4,7 @@ namespace Source;
 
 class Constant
 {
-    public const DOMAIN = 'http://abc-link.test/';
+    public const DOMAIN = 'http://url_shorter.test/';
     public const REQUEST_METHOD_NAME = '__method';
     public const DEBUG_MODE = false;
 

@@ -6,8 +6,8 @@ use Router\Router;
 require './../vendor/autoload.php';
 
 define('BASE_VIEW_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR);
-
-$router = new Router($_GET['url'] ?? '/');
+$url =
+    $router = new Router($_GET['url'] ?? '/');
 
 // HOME
 $router->get('/', [Controllers\HomeController::class, 'index'], 'home');
