@@ -4,9 +4,9 @@ namespace Source;
 
 class Constant
 {
-    public const DOMAIN = 'http://abc-link.test/';
+    public const DOMAIN = 'http://127.0.0.1/url_shorter/';
     public const REQUEST_METHOD_NAME = '__method';
-    public const DEBUG_MODE = false;
+    public const DEBUG_MODE = true;
 
     public const DB_NAME = 'abc-links';
     public const DB_HOST = '127.0.0.1';
