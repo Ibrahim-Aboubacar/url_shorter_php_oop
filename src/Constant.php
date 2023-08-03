@@ -4,7 +4,7 @@ namespace Source;
 
 class Constant
 {
-    public const DOMAIN = 'http://127.0.0.1/url_shorter/';
+    public const DOMAIN = 'http://192.168.100.3/url_shorter/';
     public const REQUEST_METHOD_NAME = '__method';
     public const DEBUG_MODE = true;
 
