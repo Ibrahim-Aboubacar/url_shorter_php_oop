@@ -2,6 +2,8 @@
 
 namespace Source;
 
+use Error;
+use Exceptions\RouterException;
 use Source\Constant;
 
 class Renderer
@@ -12,21 +14,23 @@ class Renderer
 
     public function view(): string
     {
-
         ob_start();
 
         if (!is_null($this->params)) extract($this->params);
 
         // VAR DEFINITION
+        /**
+         * @var Router $route
+         */
         $router = $_SESSION['router'];
         define('DOMAIN', Constant::DOMAIN);
 
 
-        if ($this->error === 0) require BASE_VIEW_PATH . 'parts/header.php';
+        if ($this->error === 0) require BASE_VIEW_PATH . 'parts/header.view.php';
 
-        require BASE_VIEW_PATH . $this->viewPath . '.php';
+        require BASE_VIEW_PATH . $this->viewPath . '.view.php';
 
-        if ($this->error === 0) require BASE_VIEW_PATH . 'parts/footer.php';
+        if ($this->error === 0) require BASE_VIEW_PATH . 'parts/footer.view.php';
 
         $html = self::rendDrirectives(ob_get_clean());
         die($html);

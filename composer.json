@@ -16,5 +16,7 @@
             "name": "Ibrahim Aboubacar Cisse"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "symfony/var-dumper": "^6.3"
+    }
 }
