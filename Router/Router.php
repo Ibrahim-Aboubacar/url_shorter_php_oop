@@ -55,12 +55,10 @@ class Router
     public function register($path, $callable, $method, $name)
     {
         if (Constant::DEBUG_MODE) {
-            if (str_contains(Constant::DOMAIN, 'localhost') || str_contains(Constant::DOMAIN, '121.0.0.1')) $path = trim(Constant::DOMAIN . 'public/', '/') . $path;
+            if (str_contains(Constant::DOMAIN, 'localhost') || str_contains(Constant::DOMAIN, '127.0.0.1')) $path = trim(Constant::DOMAIN . 'public/', '/') . $path;
         }
 
         $route = new Route($path, $callable);
-
-        // dump($path);
 
         $this->routes[$method][] = $route;
 
@@ -84,12 +82,11 @@ class Router
              */
             foreach ($this->routes[$requestMethod] as $route) {
 
-                // dump('run() $this->url: ' . $this->url);
                 if ($route->match($this->url)) {
                     die($route->execute($this));
                 }
             }
-            exit;
+
             // throw new RouterException('No matching routes');
             echo Renderer::error404('Page not found');
             return;
@@ -124,7 +121,7 @@ class Router
         $url = $this->namedRoutes[$name]->getUrl($params);
 
         if (Constant::DEBUG_MODE) {
-            if (str_contains($url, 'localhost') || str_contains($url, '121.0.0.1')) return $url;
+            if (str_contains($url, 'localhost') || str_contains($url, '127.0.0.1')) return $url;
         }
 
         return Constant::DOMAIN . $url;

@@ -5,7 +5,6 @@ namespace Router;
 use Exceptions\RouterException;
 use Middlewares\Middleware;
 use Source\Constant;
-use Source\Dump;
 
 class Route
 {
@@ -27,7 +26,9 @@ class Route
 
         if (Constant::DEBUG_MODE) {
             // SUPPORT FOR LOCAL EVIRRONEMENT
-            if (str_contains($thisPath, 'localhost') || str_contains($thisPath, '121.0.0.1')) $thisPath  = trim(str_replace(Constant::DOMAIN . 'public', '', $thisPath), '/');
+            if (str_contains($thisPath, 'localhost') || str_contains($thisPath, '127.0.0.1')) {
+                $thisPath  = trim(str_replace(Constant::DOMAIN . 'public', '', $thisPath), '/');
+            }
         }
 
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $thisPath);
