@@ -2,20 +2,21 @@
 
 namespace Router;
 
+use Source\App;
 use Source\Dump;
 use Source\Renderer;
 
 class RouteController
 {
-    public function index($router)
+    public function index()
     {
-        $methods = $router->getRoutes();
-        $namedRoutes = $router->getNamedRoutes();
+        $methods = App::$router->getRoutes();
+        $namedRoutes = App::$router->getNamedRoutes();
 
         echo "<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM\" crossorigin=\"anonymous\"><style>body{background-color: #202020; padding-inline: 1.5rem; color: #FAFAFA} tr{border-bottom: 1px solid #666}</style>";
 
         foreach ($methods as $method => $routes) {
-            echo " <h2>" . $method . "</h2>";
+            echo " <h2>" . $method . " (" . count($routes) . ") </h2>";
             echo "<table class='table table-dark table-striped'>";
 
             echo "<th>No</th>";
@@ -33,7 +34,7 @@ class RouteController
                 }
                 $params = trim($params, ",");
                 echo "<tr>";
-                echo "<td>#$key</td>";
+                echo "<td>#" . $key + 1 . "</td>";
                 echo "<td>$method</td>";
                 echo "<td>" . $route->getPath() . "</td>";
                 echo "<td>" . $route->getCallable()[0] . '@' . $route->getCallable()[1] . "</td>";

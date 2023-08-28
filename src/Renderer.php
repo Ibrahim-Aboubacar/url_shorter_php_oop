@@ -22,9 +22,10 @@ class Renderer
         /**
          * @var Router $route
          */
-        $router = $_SESSION['router'];
+        // $router = App::getRouter();
+        define('ROUTER', App::getRouter());
         define('DOMAIN', Constant::DOMAIN);
-
+        define('APP_NAME', App::getAppName());
 
         if ($this->error === 0) require BASE_VIEW_PATH . 'parts/header.view.php';
 

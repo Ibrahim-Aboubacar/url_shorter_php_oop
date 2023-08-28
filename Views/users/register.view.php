@@ -1,6 +1,6 @@
 <main class="d-flex align-items-center justify-content-center py-4 mt-5">
     <div class="form-signin col-10 col-md-8 col-lg-6  m-auto">
-        <form method="post" action="<?= $router->url('user.register.action') ?>">
+        <form method="post" action="<?= ROUTER->url('user.register.action') ?>">
             <?php if (isset($message)) : ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>OUPS!</strong> <?= $message ?>
@@ -65,7 +65,7 @@
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-8 col-sm-5 m-auto">
                 <p class="text-sm text-muted text-center">J'ai déjà un compte.</p>
-                <a href="<?= $router->url('user.login'); ?>" class="btn btn-secondary col-5 w-100">Se connecter</a>
+                <a href="<?= ROUTER->url('user.login'); ?>" class="btn btn-secondary col-5 w-100">Se connecter</a>
 
             </div>
         </div>

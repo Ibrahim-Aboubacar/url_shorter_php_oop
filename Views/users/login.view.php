@@ -1,35 +1,32 @@
 <main class="d-flex align-items-center justify-content-center py-4 mt-5">
     <div class="form-signin col-10 col-md-8 col-lg-5 m-auto">
-        <form method="POST" action="<?= $router->url('user.login.action') ?>">
+        <form method="POST" action="<?= ROUTER->url('user.login.action') ?>">
             @PUT
             <?php if (isset($message)) : ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>OUPS!</strong> <?= $message ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>OUPS!</strong> <?= $message ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             <?php endif; ?>
             <h1 class="h3 mb-3 fw-normal">Formulaire de connexion</h1>
 
             <div class="form-floating mt-3 has-validation">
-                <input type="email" name="email" class="form-control <?= isset($error['email']) ? "is-invalid" : ""; ?>"
-                    id="email" placeholder="name@example.com" value="<?= $old_email ?>" required_>
+                <input type="email" name="email" class="form-control <?= isset($error['email']) ? "is-invalid" : ""; ?>" id="email" placeholder="name@example.com" value="<?= $old_email ?>" required_>
                 <label for="email" style="color: #303030;">Adresse Email</label>
                 <?php if (isset($error['email'])) : ?>
-                <div class="invalid-feedback">
-                    <?= $error['email'] ?>
-                </div>
+                    <div class="invalid-feedback">
+                        <?= $error['email'] ?>
+                    </div>
                 <?php endif; ?>
             </div>
 
             <div class="form-floating mt-3 has-validation">
-                <input type="password" name="password"
-                    class="form-control <?= isset($error['password']) ? "is-invalid" : ""; ?>" id="pass"
-                    placeholder="Password" required_>
+                <input type="password" name="password" class="form-control <?= isset($error['password']) ? "is-invalid" : ""; ?>" id="pass" placeholder="Password" required_>
                 <label for="pass" style="color: #303030;">Mot de passe</label>
                 <?php if (isset($error['password'])) : ?>
-                <div class="invalid-feedback">
-                    <?= $error['password'] ?>
-                </div>
+                    <div class="invalid-feedback">
+                        <?= $error['password'] ?>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -40,7 +37,7 @@
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-8 col-sm-5 m-auto">
                 <p class="text-sm text-muted text-center">Je n'ai pas de compte.</p>
-                <a href="<?= $router->url('user.register'); ?>" class="btn btn-secondary col-5 w-100">S'inscrire</a>
+                <a href="<?= ROUTER->url('user.register'); ?>" class="btn btn-secondary col-5 w-100">S'inscrire</a>
 
             </div>
         </div>

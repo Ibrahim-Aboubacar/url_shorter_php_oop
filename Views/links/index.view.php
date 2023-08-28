@@ -9,7 +9,7 @@ use Source\Constant; ?>
     <div class="col-10 m-auto">
         <div class="row justify-content-end">
             <div class="col-3 mr-auto text-end">
-                <a href="<?= $router->url('link.create')
+                <a href="<?= ROUTER->url('link.create')
                             ?>" class="btn btn-primary">Créer</a>
             </div>
         </div>
@@ -54,9 +54,9 @@ use Source\Constant; ?>
                                 </span>
                             </td>
                             <td class="d-none d-md-table-cell">
-                                <a href="<?= $router->url('link.short', ['id' => $link->id])  ?>" target="_blank">
+                                <a href="<?= ROUTER->url('link.short', ['id' => $link->id])  ?>" target="_blank">
 
-                                    <?= $router->url('link.short', ['id' => $link->id])  ?>
+                                    <?= ROUTER->url('link.short', ['id' => $link->id])  ?>
                                 </a>
                                 <!-- BONNUS -->
                                 <span class="badge text-bg-light">
@@ -64,9 +64,9 @@ use Source\Constant; ?>
                                 </span>
                             </td>
                             <td class="text-end" style="max-width: 200px;">
-                                <a href="<?= $router->url('links.edite', ['id' => $link->id]) ?>" class="btn btn-sm my-1 btn-primary">Modifer</a>
+                                <a href="<?= ROUTER->url('links.edite', ['id' => $link->id]) ?>" class="btn btn-sm my-1 btn-primary">Modifer</a>
 
-                                <form method="POST" action="<?= $router->url('links.delete', ['id' => $link->id]) ?>">
+                                <form method="POST" action="<?= ROUTER->url('links.delete', ['id' => $link->id]) ?>">
                                     @DELETE
                                     <button data-link-id="<?= $link->id ?>" class="btn btn-sm my-1 btn-danger delete-link-btn">Supprimer</button>
                                 </form>
@@ -78,7 +78,7 @@ use Source\Constant; ?>
                 // DISPLAY MESSAGE IF THE USER DOES NOT HAVE A SHORTED LINK
                 else : ?>
                     <tr>
-                        <th colspan="5" class="text-center">Aucun lien raccourci, veuillez en <a href="<?= $router->url('link.create'); ?>">créer</a></th>
+                        <th colspan="5" class="text-center">Aucun lien raccourci, veuillez en <a href="<?= ROUTER->url('link.create'); ?>">créer</a></th>
                     </tr>
                 <?php endif; ?>
 

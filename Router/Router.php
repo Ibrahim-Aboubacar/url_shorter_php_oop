@@ -6,6 +6,7 @@ use Router\Route;
 use Source\Constant;
 use Source\Renderer;
 use Exceptions\RouterException;
+use Source\App;
 
 class Router
 {
@@ -13,10 +14,10 @@ class Router
     private $routes = [];
     private $namedRoutes = [];
 
-    public function __construct($url)
+    public function __construct($url = null)
     {
-        if ($url === '') {
-            $this->url = '/';
+        if (!$url) {
+            $this->url = $_SERVER['REQUEST_URI'] ?? '/';
         } else {
             $this->url = $url;
         }
@@ -73,17 +74,22 @@ class Router
     public function run()
     {
         try {
-            $_SESSION['router'] = $this;
+            // $_SESSION['router'] = $this;
+            // REGISTER THE ROUTER IN OUR APP'S GLOBAL CONTAINER
+            // FOR EASY ACCESS LATER
+
+            App::setRouter($this);
 
             $requestMethod = $this->getRequestMethod();
 
             /**
              * @var Route $route an instance of Route
              */
+            // dump($this);
             foreach ($this->routes[$requestMethod] as $route) {
 
                 if ($route->match($this->url)) {
-                    die($route->execute($this));
+                    die($route->execute());
                 }
             }
 

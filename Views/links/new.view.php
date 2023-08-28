@@ -1,6 +1,6 @@
 <main class="d-flex align-items-center justify-content-center py-4 mt-5">
     <div class="form-signin col-10 col-md-8 col-lg-5  m-auto">
-        <form method="post" action="<?= $router->url('link.store')
+        <form method="post" action="<?= ROUTER->url('link.store')
                                     ?>">
             <?php if (isset($message)) : ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

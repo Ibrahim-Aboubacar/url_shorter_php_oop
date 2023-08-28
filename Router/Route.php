@@ -55,11 +55,11 @@ class Route
         return '([^/]+)';
     }
 
-    public function execute(Router $router)
+    public function execute()
     {
         if (is_callable($this->callable)) {
             // APPEL AU MIDDLEWARE 
-            Middleware::resolve($this->getMiddleware(), $router);
+            Middleware::resolve($this->getMiddleware());
 
             $action = $this->callable;
             return $action();
@@ -72,9 +72,9 @@ class Route
                 if (method_exists($className, $method)) {
                     $class = new $className();
                     // APPEL AU MIDDLEWARE 
-                    Middleware::resolve($this->getMiddleware(), $router);
+                    Middleware::resolve($this->getMiddleware());
 
-                    return call_user_func_array([$class, $method], [...$this->matches, $router]);
+                    return call_user_func_array([$class, $method], [...$this->matches]);
                 } else {
                     throw new RouterException("Method not foun for '{$method}' in '{$className}'", true);
                 }

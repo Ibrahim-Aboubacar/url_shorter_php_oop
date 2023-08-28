@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-auto">
     <div class="row">
         <div class="col-12 col-md-6 d-flex justify-content-center align-items-center flex-column mt-4 mt-md-0">
             <div>
@@ -18,7 +18,7 @@
                 <p class="mb-0 text-muted_ text-xs">
                     Reach faster
                 </p>
-                <a href="<?= $router->url('links.show'); ?>" class="btn btn-primary mt-4 btn-lg">Get Started
+                <a href="<?= ROUTER->url('links.show'); ?>" class="btn btn-primary mt-4 btn-lg">Get Started
 
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="16" height="16" x="0" y="0" viewBox="0 0 512.1 512.1" style="enable-background:new 0 0 512 512; width: 16px; color: current;" xml:space="preserve" class="">
