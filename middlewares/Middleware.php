@@ -13,7 +13,7 @@ class Middleware
         'debug' => DebugMiddleware::class,
     ];
 
-    public static function resolve($key, Router $router)
+    public static function resolve($key)
     {
         if (is_null($key)) return;
 
@@ -22,7 +22,7 @@ class Middleware
 
         if (class_exists($classOfMiddleware)) {
 
-            if (method_exists($classOfMiddleware, 'handle')) return call_user_func_array([(new $classOfMiddleware()), 'handle'], [$router]);
+            if (method_exists($classOfMiddleware, 'handle')) return call_user_func_array([(new $classOfMiddleware()), 'handle'], []);
 
             throw new RouterException("Method 'handle' not found in {$classOfMiddleware}.", true);
         } else {

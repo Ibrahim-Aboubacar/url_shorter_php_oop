@@ -4,7 +4,8 @@ namespace Controllers;
 
 use Models\Link;
 use Models\User;
-use Router\Router;
+// use Router\Router;
+use Source\App;
 use Source\Renderer;
 
 class LinkController
@@ -15,7 +16,6 @@ class LinkController
             'pageName' => 'links',
             'links' => (new link())->getUsersLinks($_SESSION['auth']['id'] ?? 0),
             'message' => '',
-
         ];
 
         return Renderer::make('links/index', $vars);
@@ -50,7 +50,7 @@ class LinkController
     public function edite(int $id): Renderer
     {
         $link = new link($id);
-        // Throw a 404 error whwn we don't have a link or 
+        // Throw a 404 error when we don't have a link or 
         // the link does not belong to the logedin user
         if (!$link->getInitialized() || !$link->belongsToUser(new User($_SESSION['auth']['id'] ?? 0))) return Renderer::error404('Link does not exit');
 
@@ -65,7 +65,7 @@ class LinkController
         return Renderer::make('links/edite', $vars);
     }
 
-    public function delete(int $id, Router $router): Renderer
+    public function delete(int $id): Renderer
     {
         $link = new link($id);
         // Throw a 404 error whwn we don't have a link or 
@@ -75,10 +75,10 @@ class LinkController
         $link->delete();
 
         http_response_code(302);
-        return header('location: ' . $router->url('links.show'));
+        return header('location: ' . App::getRouter()->url('links.show'));
     }
 
-    public function store(Router $router): Renderer
+    public function store(): Renderer
     {
         $error = [];
         // Traitement de nom
@@ -127,7 +127,7 @@ class LinkController
 
             if ($res) {
                 http_response_code(200);
-                header('location: ' . $router->url('links.show'));
+                header('location: ' . App::getRouter()->url('links.show'));
                 die;
             } else {
                 $message = "Une erreur s'est produite, veuillez réessayer s'il vous plait!";
@@ -145,7 +145,7 @@ class LinkController
         return Renderer::make('links/new', $vars);
     }
 
-    public function update(int $id, Router $router): Renderer
+    public function update(int $id): Renderer
     {
         $link = new Link($id);
         // Throw a 404 error whwn we don't have a link or 
@@ -186,7 +186,8 @@ class LinkController
             $old_state = $state;
         }
 
-        if (!$error) {
+        if (!$error ?? true) {
+
 
             $link->setName($old_name);
             $link->setOriginal_link($old_link);
@@ -196,7 +197,7 @@ class LinkController
 
             if ($res) {
                 http_response_code(202);
-                header('location: ' . $router->url('links.show'));
+                header('location: ' . App::getRouter()->url('links.show'));
                 die;
             } else {
                 http_response_code(422);

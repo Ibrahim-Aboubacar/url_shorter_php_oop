@@ -2,17 +2,25 @@
 
 namespace Models;
 
+use Source\App;
+
 class  Link extends Model
 {
-    private string $name;
-    private string $original_link;
-    private string $state;
-    private int $visite = 0;
-    private User $user;
-    protected $columns = ['name', 'original_link', 'state', 'visite'];
+    public string $name;
+    public string $original_link;
+    public string $state;
+    public int $visite = 0;
+    public int|User $user;
+    protected $columns = ['id', 'name', 'original_link', 'state', 'visite'];
+    protected $relations = ['users' => 'user'];
+
+    // public function __construct()
+    // {
+    // }
 
     public function init($id)
     {
+
         /**
          *  @var Link $link
          */
@@ -52,7 +60,6 @@ class  Link extends Model
     public function setName($name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -72,7 +79,6 @@ class  Link extends Model
     public function setOriginal_link($original_link)
     {
         $this->original_link = $original_link;
-
         return $this;
     }
 
@@ -92,16 +98,20 @@ class  Link extends Model
     public function setState($state)
     {
         $this->state = $state;
-
         return $this;
     }
 
     /**
      * Get the value of user
      */
-    public function getUsersLinks($userId)
+    public function getUsersLinks($user)
     {
-        return $this->where('user', $userId);
+        if ($user instanceof User) {
+            $id = $user->getId();
+        } elseif (is_int($user)) {
+            $id = (int)$user;
+        }
+        return $this->where("user = :id")->setParam('id', $id)->fetchAll();
     }
 
     /**
@@ -120,7 +130,6 @@ class  Link extends Model
     public function setUser($user)
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -140,7 +149,6 @@ class  Link extends Model
     public function setVisite($visite)
     {
         $this->visite = $visite;
-
         return $this;
     }
 
@@ -149,7 +157,7 @@ class  Link extends Model
         $query = "UPDATE {$this->table} SET visite = (visite + 1) WHERE id = ?";
 
         try {
-            $statement = $this->getPDO()->prepare($query);
+            $statement = App::getPDO()->prepare($query);
             $statement->execute([$this->getId()]);
             return true;
         } catch (\PDOException $e) {

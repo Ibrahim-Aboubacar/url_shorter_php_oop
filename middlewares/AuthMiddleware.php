@@ -3,11 +3,13 @@
 namespace Middlewares;
 
 use Router\Router;
+use Source\App;
 
 class AuthMiddleware
 {
-    public function handle(Router $router)
+    public function handle()
     {
+        $router = App::getRouter();
         if (!isset($_SESSION['auth']['id'])) {
             // Renvoyer le code de réponse 401 Unauthorized
             http_response_code(401);

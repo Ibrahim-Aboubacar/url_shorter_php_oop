@@ -1,13 +1,12 @@
 <?php
 session_start();
+define('DEBUG_TIME', microtime(true));
 
 use Router\Router;
 
 require './../vendor/autoload.php';
-
 define('BASE_VIEW_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR);
-
-$router = new Router($_GET['url'] ?? '/');
+$router = new Router();
 
 // HOME
 $router->get('/', [Controllers\HomeController::class, 'index'], 'home');
@@ -29,6 +28,12 @@ $router->post('/link', [Controllers\LinkController::class, 'store'], 'link.store
 // USER
 $router->get('/login', [Controllers\UserController::class, 'login'], 'user.login')->withMiddleware('guest');
 $router->put('/login', [Controllers\UserController::class, 'loginAction'], 'user.login.action')->withMiddleware('guest');
+
+$router->get('/profile', [Controllers\UserController::class, 'profile'], 'user.profile')->withMiddleware('auth');
+$router->patch('/profile/information', [Controllers\UserController::class, 'profileInfoAction'], 'user.profile.info.action')->withMiddleware('auth');
+$router->patch('/profile/password', [Controllers\UserController::class, 'profilePasswordAction'], 'user.profile.password.action')->withMiddleware('auth');
+$router->post('/profile/detele', [Controllers\UserController::class, 'profileDelete'], 'user.profile.delete')->withMiddleware('auth');
+$router->delete('/profile/detele', [Controllers\UserController::class, 'profileDeleteAction'], 'user.profile.delete.action')->withMiddleware('auth');
 
 $router->get('/register', [Controllers\UserController::class, 'register'], 'user.register')->withMiddleware('guest');
 $router->post('/register', [Controllers\UserController::class, 'registerAction'], 'user.register.action')->withMiddleware('guest');
